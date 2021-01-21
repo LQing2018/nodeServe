@@ -9,7 +9,6 @@ const server =  httpModule.createServer()
 
 server.on('request',function(req,res){
     console.log("访问服务器");
-
     // http 的响应头  告诉浏览器及格式
     // node.js 可以读取文件并传回客户端
     res.write("ok");
