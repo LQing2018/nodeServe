@@ -1,0 +1,20 @@
+{
+  "name": "nodeServe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LQing2018/nodeServe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LQing2018/nodeServe/issues"
+  },
+  "homepage": "https://github.com/LQing2018/nodeServe#readme"
+}
