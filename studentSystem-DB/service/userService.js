@@ -3,9 +3,9 @@ const { findUser, addUser } = require("../dao/userdao")
 // @ts-ignore
 module.exports = {
 
-    login(data) {
-        const res = findUser(data);
-        if (res) {
+   async login(data) {
+        const res = await findUser(data);
+        if (res.length > 0) {
             return {
                 success:res,
                 msg:"登录成功"

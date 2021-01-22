@@ -9,7 +9,11 @@ var logger = require('morgan');
 // 引入配置的请求路由文件
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var studetsRouter = require('./routes/students');
 
+//公共链接数据库提出来，   
+
+const dbUtils = require("./dao/dbUtils");
 var app = express();
 
 // view engine setup 设置模板引擎
@@ -31,6 +35,9 @@ app.use(express.static(path.join(__dirname, 'public')));  // 静态资源的处�
 // 请求地址 映射的路由文件
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/student', studetsRouter);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
