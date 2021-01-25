@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+	<title>预约</title>
+	<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+	<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+	<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="../../css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/index.css?v=1" />
+</head>
+
+<body>
+	<div id="app">
+		<div class="mui-content order">
+			<form class="mui-input-group">
+				<input type="text" placeholder="请输入您的姓名" v-model="name">
+				<input type="text" placeholder="请输入您的联系方式" v-model="phone">
+				<div class="sanjiao">
+					<input type="text" readonly placeholder="请选择您所在的地区" v-model="cityname" @click="cityChoose">
+				</div>
+				<p>*工作人员将会根据您所预留的信息于 3个工作日内与您取得联系，请保持电话畅通</p>
+
+				<div class="ordersbtn" @click="orderSubmit">立即预约</div>
+			</form>
+		</div>
+	</div>
+	<script src="../../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/mui.picker.js"></script>
+	<script src="../../js/mui.poppicker.js"></script>
+	<script src="./js/xinyang.js"></script>
+	<script src="../../js/vue.js"></script>
+	<script src="../../js/rem.js"></script>
+	<script src="../../js/reaquest.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/api.js"></script>
+	<script>
+		var picker = new mui.PopPicker({
+			layer: 1,
+		});
+		new Vue({
+			el: '#app',
+			data: {
+				id: '',
+				name: '',
+				phone: '',
+				cityname: '',
+				openId:'',
+			},
+			created() {
+				
+				this.id = getParam('id')
+				this.openId = getParam('openId') 
+				picker.setData(cityData3)
+			},
+			methods: {
+				orderSubmit() {
+					var that = this;
+					var option = {
+						data: {
+							phoneName: that.id,
+							userName: that.name,
+							userPhone: that.phone,
+							area: that.cityname,
+							openId: that.openId
+						},
+						loading: true,
+						succall: true
+					};
+					muiAjax.get(xinyangapi + `/onlinehandleactivity-wechat/appointmentPhone/saveAppointmentPhone`, option,
+						function (res) {
+							if (res.code == 200) {
+								mui.alert(res.message, '预约成功', function () {});
+							}else{
+								mui.alert(res.message, '预约失败', function () {});
+							}
+						})
+				},
+				gohome() {
+					location.href = './index.html?openId=' + this.openId
+				},
+
+				cityChoose() {
+					var that = this
+					picker.show(function (SelectedItem) {
+						console.log(SelectedItem);
+						that.cityname = SelectedItem[0].text
+						console.log(that.cityname);
+					})
+				},
+			}
+		})
+	</script>
+</body>
+
+</html>

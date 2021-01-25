@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+	<title>详情</title>
+	<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/index.css?v=0.1" />
+</head>
+
+<body>
+	<div id="app">
+		<header class="mui-bar mui-bar-nav">
+			<img class="main" src="./images/persion.png" alt="" @click="gomain">
+			<img class="input" src="./images/search.png" alt="">
+			<span class="name" @click="gohome">返回首页</span> 
+		</header>
+		<div class="mui-content detaile">
+			<div class="contentimg">
+				<img :src="img" alt="" class="imgwidth">
+				<div class="goyuyue" @click="goyuyue">立即预约</div>
+			</div>
+		</div>
+	</div>
+	<script src="../../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/vue.js"></script>
+	<script src="../../js/rem.js"></script>
+	<script src="../../js/reaquest.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/api.js"></script>
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				id:'',
+				img:'',
+				openId:'',
+			},
+			created() {
+				this.id = getParam('id')
+				this.openId = getParam('openId')
+				if (this.id == 'Redmi note 9') {
+					this.img = './images/detail1.png';
+				}else if(this.id == 'HUAWEI nova8'){
+					this.img = './images/detail2.png';
+				}else if(this.id == 'VIVO Y52s'){
+					this.img = './images/detail3.png';
+				}else{
+					this.img = './images/detail4.png';
+				}
+			},
+			methods: {
+				goyuyue() { 
+					location.href='./order.html?id=' + this.id + '&openId=' + this.openId
+				},
+				gohome(){
+					location.href='./index.html?openId=' + this.openId
+				},
+				gomain(){
+					location.href='./orderList.html?openId=' + this.openId
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+	<title>业务分享</title>
+	<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+
+<body>
+	<div id="app">
+		<div class="share">
+			<div class="header"></div>
+			<div class="share_content">
+				<div class="item">
+					<div class="i_img"> <img src="./images/share_1.png" alt=""> </div>
+					<div class="i_con">
+						<h4>选卡号</h4>
+						<p>专属靓号 独一无二</p>
+						<p class="i_btn"><button @click="sharehref(1)">立即查看</button></p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="i_img"> <img src="./images/share_2.png" alt=""> </div>
+					<div class="i_con">
+						<h4>装宽带</h4>
+						<p>安装宽带 一键预约 </p>
+						<p class="i_btn"><button @click="sharehref(2)">立即查看</button></p>
+					</div>
+				</div>
+				<div class="item">
+					<div class="i_img"> <img src="./images/share_3.png" alt=""> </div>
+					<div class="i_con">
+						<h4>购终端</h4>
+						<p>热门机型 任您挑选 </p>
+						<p class="i_btn"><button @click="sharehref(3)">立即查看</button></p>
+					</div>
+				</div>
+			</div>
+			<div class="btn_p">
+				<span>选号卡、装宽带、购终端就上信阳移动376 分享赢豪礼！</span>
+			</div>
+
+			<!-- 分享按钮 -->
+			<div class="barebtn" @click="sharehref(4)"></div>
+		</div>
+	</div>
+	<script src="../../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/vue.js"></script>
+	<script src="../../js/rem.js"></script>
+	<script src="../../js/reaquest.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/api.js"></script>
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				openId:'',
+				phone:'',
+			},
+			created() {
+				this.openId = getParam('openId')
+				this.phone = getParam('phone')
+			},
+			methods: {
+				sharehref(index) {
+					if (index == 1) {
+						location.href = 'http://10086.hacitd.com/alipay/mobile/activity/numAnyang/index.html?orgId=456687766721208320&openId='+ this.openId + '&phone=' + this.phone
+					}else if(index == 2) {
+						location.href = '?openId='+ this.openId + '&phone=' + this.phone
+					}else if(index == 3) {
+						location.href = 'http://10086.hacitd.com/prod/wxact/cmcc-xinyang/wechatpage/index.html?openId='+ this.openId + '&phone=' + this.phone
+					} else{
+						location.href = 'http://xy.hacitd.com/onlinehandleactivity-wechat/home/share?type=1'
+					} 
+				},
+			}
+		})
+	</script>
+</body>
+
+</html>

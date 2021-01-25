@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+	<title>商城首页</title>
+	<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/index.css?v=0.1" />
+</head>
+
+<body>
+	<div id="app">
+		<header class="mui-bar mui-bar-nav">
+			<img class="main" src="./images/persion.png" alt="" @click="gomain">
+			<img class="input" src="./images/search.png" alt="">
+			<span class="name">信阳移动</span>
+		</header>
+		<div class="mui-content sharebox">
+			<div class="mainpage" v-for="item in list">
+				<img :src="item.img" alt="" class="imgwidth">
+				<div class="mainbtn">
+					<span @click="loger(item.id)">进一步了解></span>
+					<span @click="yuyue(item.id)">预约></span>
+				</div>
+			</div>
+
+			<!-- 分享 -->
+			<div class="sharebt" @click="share4">分享</div>
+		</div>
+	</div>
+	<script src="../../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/vue.js"></script>
+	<script src="../../js/rem.js"></script>
+	<script src="../../js/reaquest.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/api.js"></script>
+	<script>
+		var localapi = "http://localhost:8889"
+		new Vue({
+			el: '#app',
+			data: {
+				openId: '',
+				list: [{
+					img: './images/de1.png',
+					id: 'Redmi note 9'
+				}, {
+					img: './images/de2.png',
+					id: 'HUAWEI nova8'
+				}, {
+					img: './images/de3.png',
+					id: 'VIVO Y52s'
+				}, {
+					img: './images/de4.png',
+					id: 'OPPO Reno 5 Pro'
+				}, ]
+			},
+			created() {
+				this.openId = getParam('openId')
+				localStorage.setItem('openId', this.openId)
+				this.orderSubmit()
+			},
+			methods: {
+				orderSubmit() {
+					var that = this;
+					var option = {
+						data: {
+							
+						},
+						loading: true,
+						succall: true
+					};
+					muiAjax.get(localapi + `/student/findAll`, option,
+						function (res) {
+							console.log(res);
+						})
+				},
+				share4() {
+					location.href = 'http://xy.hacitd.com/onlinehandleactivity-wechat/home/share?type=4'
+				}
+				,
+				loger(id) {
+					console.log(id);
+					location.href = './detail.html?id=' + id + '&openId=' + this.openId
+				},
+				yuyue(id) {
+					console.log(id);
+					location.href = './order.html?id=' + id + '&openId=' + this.openId
+				},
+				gomain() {
+					location.href = './orderList.html?openId=' + this.openId
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

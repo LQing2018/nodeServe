@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+	<title>我的</title>
+	<link rel="stylesheet" type="text/css" href="../../css/mui.min.css" />
+	<link rel="stylesheet" type="text/css" href="../../css/common.css" />
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
+</head>
+
+<body>
+	<div id="app">
+		<div class="orderside">
+			<div class="orderheader">
+				<p>手机型号</p>
+				<p>预约时间</p>
+			</div>
+			<div class="mui-content"> 
+				<div class="orderlist"  v-for="item in list">
+					<p>{{item.phoneName}}</p>
+					<p>{{item.createTime}}</p>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+	<script src="../../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/vue.js"></script>
+	<script src="../../js/rem.js"></script>
+	<script src="../../js/reaquest.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/api.js"></script>
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				list:[],
+				openId:'',
+			},
+			created() { 
+				this.openId = getParam('openId')
+				// 查询列表
+				this.getorderlist()
+			},
+			methods: {
+				loger(id) {
+					console.log(id);
+					location.href='./detail.html?id='+id+ '&openId=' + this.openId
+				},
+				yuyue(id) {
+					console.log(id);
+					location.href='./order.html?id='+id+ '&openId=' + this.openId
+				},
+				getorderlist() {
+					var that = this;
+					var option = {
+						data: {
+							openId:that.openId
+						},
+						loading: true,
+						succall: true
+					}
+					muiAjax.post(xinyangapi + `/onlinehandleactivity-wechat/appointmentPhone/appointmentPhoneList`, option, function (res) {
+						console.log(res);
+						that.list = res
+					})
+				},
+			}
+		})
+	</script>
+</body>
+
+</html>

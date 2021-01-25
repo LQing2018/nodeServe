@@ -4,7 +4,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const  cors = require('cors')
 
 // 引入配置的请求路由文件
 var indexRouter = require('./routes/index');
@@ -16,6 +16,13 @@ var studetsRouter = require('./routes/students');
 const dbUtils = require("./dao/dbUtils");
 var app = express();
 
+// 允许跨域访问
+
+ app.use(cors())
+ app.listen(8000, function () {
+   console.log('start')
+ })
+ 
 // view engine setup 设置模板引擎
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
