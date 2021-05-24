@@ -12,7 +12,27 @@ router.get('/admin', async (ctx) => {
     ctx.body = "admin页面"
 })
 router.get('/news',async (ctx) =>{
+    // ctx 上下文 context 包含了request 和 respinse 等信息
+    // 返回数据  相当于：原生里面的res.writeHead() res.end()
     ctx.body = "new页面"
+
+    // 在koa2中GET 传值 通过request接收，但是接收的方法有两种：
+    // query 和 querystring  query 返回的是格式化好的参数对象   querystring 返回的是请求字符串
+
+    // 从ctx 中读取get 传值
+    console.log("------"+ctx.url) // /news?id=1&title=aaa
+    console.log(ctx.query);  // { id: '1', title: 'aaa' } 获取的是对象   用的最多的方式      ******推荐
+    console.log(ctx.querystring);  // id=1&title=aaa      获取的是一个字符串
+    console.log(ctx.request.url);   // /news?id=1&title=aaa
+    console.log(ctx.request.query);   // { id: '1', title: 'aaa' } 对象
+    console.log(ctx.request.querystring);   // id=1&title=aaa
+})
+
+router.get('/article/:id', async (ctx) =>{
+    ctx.body = "详情页"
+    console.log(ctx.url);
+    console.log(ctx.params.id);
+
 })
 app.use(router.routes())
 app.use(router.allowedMethods())
