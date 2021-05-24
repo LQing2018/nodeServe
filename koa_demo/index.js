@@ -1,10 +1,20 @@
+
 //引入koa
 const Koa = require('koa');
 const Router = require('koa-router')
+
 //实例化koa
 const app = new Koa();
 const router = new Router()
+
 //配置路由
+
+//匹配任何路由，如果不写next，这个路由被匹配到了就不会继续向下匹配
+app.use(async (ctx,next) => {
+    ctx.body = "第一个koa项1目";
+    await next()
+})
+
 router.get('/', async (ctx) => {
     ctx.body = "首页"
 })
@@ -34,6 +44,8 @@ router.get('/article/:id', async (ctx) =>{
     console.log(ctx.params.id);
 
 })
+
+// 启动路由
 app.use(router.routes())
 app.use(router.allowedMethods())
 /**
@@ -42,8 +54,6 @@ app.use(router.allowedMethods())
    路由中间件最后调用.此时根据 ctx.status 设置 response 响应头
    可以配置也可以不配置,建议配置，
    */
-// app.use(async ctx => {
-//     ctx.body = "第一个koa项1目";
-// })
+
 //在listen里面写端口号 监听端口
 app.listen(3000);
