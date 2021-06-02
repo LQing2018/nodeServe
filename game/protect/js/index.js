@@ -106,7 +106,7 @@ var background = {
 
 //飞机图片
 var heroImg = new Image();
-heroImg.src = "img/herofly.png"; 
+heroImg.src = "img/herofly.png";
 //飞机对象
 var hero = {
     //属性
@@ -137,10 +137,10 @@ var hero = {
             //重置
             this.flagI = 0;
         }
-
+        //  
         //把图片的某一部分画到canvas上某个区域
         ctx.drawImage(heroImg, this.i * this.w, 0, this.w, this.h, this.x, this.y, this.w, this.h);
-    }, 
+    },
 }
 
 //鼠标控制飞机
@@ -155,6 +155,7 @@ mapCanvas.onmousedown = function (event) {
             //飞机的中心在鼠标的位置
             hero.x = event.offsetX - hero.w / 2;
             hero.y = event.offsetY - hero.h / 2;
+
         }
     }
 }
@@ -175,6 +176,7 @@ mapCanvas.ontouchstart = function (event) {
             //飞机的中心在鼠标的位置
             hero.x = event.touches[0].clientX - hero.w / 2;
             hero.y = event.touches[0].clientY - hero.h / 2;
+            console.log(hero.x, hero.y);
             //禁止系统事件行为
             event.preventDefault();
         }
@@ -241,7 +243,19 @@ Enemy.prototype.draw = function () {
 
 }
 Enemy.prototype.move = function () {
-    // this.y += this.speed;
+    var spacex = Math.abs(hero.x) - Math.abs(this.x);
+    var spacey = Math.abs(hero.y) - Math.abs(this.y);
+    if (this.y > hero.y) {
+        this.y -= (spacey * this.speed / 100);
+    } else {
+        this.y += (spacey * this.speed / 100);
+    }
+
+    if (this.x > hero.x) {
+        this.x -= (-spacex * this.speed / 100);
+    } else {
+        this.x += (spacex * this.speed / 100);
+    }
 }
 //随机数
 function random(x, y) {
@@ -263,12 +277,10 @@ function randomEnemy() {
     // var num = random(49, 50);
 
 
-    if (num <= 50) { 
-        //随机位置
-        console.log(mapCanvas.width - 46);
+    if (num <= 50) {
+        //随机位置 
         var randomX = random(0, mapCanvas.width - 46);
-        console.log(mapCanvas.height);
-        var randomY = random(0, (mapCanvas.height*1)/5);
+        var randomY = random(0, (mapCanvas.height * 1) / 5);
         //随机速度
         var randomSpeed = random(2, 6);
         //创建中型飞机
@@ -313,24 +325,10 @@ Prop.prototype.draw = function () {
 //移动
 Prop.prototype.move = function () {
     this.y += this.speed;
-    this.x = this.speed;
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 //记录创建出来的道具
-var props = []; 
+var props = [];
 //两个矩形碰撞检测
 function crash(obj1, obj2) {
     //两个物体上下左右的位置
