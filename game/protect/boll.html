@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="mycanvas" width="1500" height="800"></canvas>
+    <script>
+        // 创建画布
+        var canvas = document.getElementById('mycanvas');
+        var ctx = canvas.getContext('2d');
+        // 球类
+        function Ball(x, y) {
+            this.x = x;
+            this.y = y;
+            // 初始半径
+            this.r = parseInt(Math.random() * 50) + 10;
+            this.step = parseInt(Math.random() * 5) + 0.1;
+            // 设置随机颜色
+            this.color = getRandom();
+            // 设置随机方向
+            this.dx = parseInt(Math.random() * 10) - 5;
+            this.dy = parseInt(Math.random() * 10) - 5;
+            // 将自身对象装入数组中
+            ballArr.push(this);
+        }
+        // 在数组中删除对象
+        Ball.prototype.remove = function () {
+            for (var i = 0; i < ballArr.length; i++) {
+                if (ballArr[i] == this) {
+                    ballArr.splice(i, 1);
+                }
+            }
+        }
+        // 更新数据
+        Ball.prototype.update = function () {
+            // 更新数据
+            this.x += this.dx;
+            this.y += this.dy;
+            this.r -= this.step;
+            // 清除数组中的小球
+            if (this.r <= 0) {
+                this.remove();
+            }
+            // 如果超出边界，小球继续运动
+            if (this.x < 0) {
+                this.x = 1500;
+                this.color = getRandom();
+            } else if (this.x > 1500) {
+                this.x = 0;
+                this.color = getRandom();
+            } else if (this.y < 0) {
+                this.y = 800;
+                this.color = getRandom();
+            } else if (this.y > 800) {
+                this.y = 0;
+                this.color = getRandom();
+            }
+        }
+        // 渲染小球
+        Ball.prototype.render = function () {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+        // canvas 画布DOM2事件
+        canvas.addEventListener("mousemove", function (event) {
+            new Ball(event.offsetX, event.offsetY);
+        });
+        var ballArr = [];
+        // 定时器进行动画渲染和更新
+        setInterval(function () {
+            // 动画逻辑 
+            // 清屏-更新-渲染
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // 小球的更新和渲染
+            for (var i = 0; i < ballArr.length; i++) {
+                ballArr[i].update();
+                if (ballArr[i]) {
+                    ballArr[i].render();
+                }
+            }
+        }, 30);
+        // 随机颜色
+        function getRandom() {
+            var allType = "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f";
+            var allTypeArr = allType.split(",");
+            var color = "#";
+            // 拼接颜色字符串
+            for (var i = 0; i < 6; i++) {
+                var random = parseInt(Math.random() * allTypeArr.length);
+                color += allTypeArr[random];
+            }
+            return color;
+        }
+    </script>
+</body>
+
+</html>

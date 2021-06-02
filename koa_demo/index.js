@@ -11,6 +11,7 @@ const router = new Router()
 
 //匹配任何路由，如果不写next，这个路由被匹配到了就不会继续向下匹配
 app.use(async (ctx,next) => {
+    console.log("我是一个中间件");
     ctx.body = "第一个koa项1目";
     await next()
 })
