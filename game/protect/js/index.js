@@ -176,7 +176,7 @@ mapCanvas.ontouchstart = function (event) {
             //飞机的中心在鼠标的位置
             hero.x = event.touches[0].clientX - hero.w / 2;
             hero.y = event.touches[0].clientY - hero.h / 2;
-            console.log(hero.x, hero.y);
+            // console.log(hero.x, hero.y);
             //禁止系统事件行为
             event.preventDefault();
         }
@@ -246,9 +246,9 @@ Enemy.prototype.move = function () {
     var spacex = Math.abs(hero.x) - Math.abs(this.x);
     var spacey = Math.abs(hero.y) - Math.abs(this.y);
     if (this.y > hero.y) {
-        this.y -= (spacey * this.speed / 100);
+        this.y -= (spacey * this.speed / 50);
     } else {
-        this.y += (spacey * this.speed / 100);
+        this.y += (spacey * this.speed / 200);
     }
 
     if (this.x > hero.x) {
@@ -297,7 +297,7 @@ function randomEnemy() {
             enemies.splice(i, 1);
             //数组中删除某个元素, 为了保证相邻的下一个元素能够遍历到, 需要i--
             i--;
-            // console.log(+1);
+            console.log('+1');
         } else {
             enemies[i].move();
             enemies[i].draw();
