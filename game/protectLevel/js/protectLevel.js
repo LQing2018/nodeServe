@@ -15,7 +15,7 @@ var menuUl = document.getElementById("menu");
 var endScoreLi = document.getElementById("end-score");
 mapCanvas.width = document.documentElement.clientWidth;
 mapCanvas.height = document.documentElement.clientHeight;
-var picsnames = ["background.webp", "bullet1.png", "bullet2.png", "enemy1.png", "enemy22.png", "enemy3.png",
+var picsnames = ["background.png", "bullet1.png", "bullet2.png", "enemy1.png", "enemy2.png", "enemy3.png",
     "herofly.png", "loading.gif", "prop.png"
 ];
 var musicNames = ["bullet.mp3", "enemy1_down.mp3", "enemy2_down.mp3", "enemy3_down.mp3", "game_music.mp3",
@@ -67,7 +67,7 @@ function loadMusic() {
 
 //背景图
 var bgImage = new Image();
-bgImage.src = "img/background.webp";
+bgImage.src = "img/background.png";
 //背景图对象(只有一个)
 var background = {
     //属性
@@ -79,26 +79,18 @@ var background = {
     draw: function () {
         //如何满屏, 并且不调整图片比例
         //1.求最大行和最大列
-        var col = Math.ceil(mapCanvas.width / mapCanvas.width);
         var row = Math.ceil(mapCanvas.height / 568);
+        var col = Math.ceil(mapCanvas.width / 320);
         //2.循环添加图片
         //为了保证图片无限滚动, 画两张一样的背景图
         for (var i = -row; i < row; i++) { //行
-            for (var j = 0; j < col; j++) {
-                ctx.drawImage(bgImage, 0, 0, 320, 568, mapCanvas.width * j, mapCanvas.height * i + this.y, mapCanvas.width, mapCanvas.height);
+            for (var j = 0; j < col; j++) { //列
+                ctx.drawImage(bgImage, 320 * j, 568 * i + this.y);
             }
         }
     },
     //移动
     move: function () {
-        // this.y += (20);
-        // // this.y ++;
-        // var row = Math.ceil(mapCanvas.height / 568);
-        // //判断一张图片滚动完成, 重置位置
-        // if (this.y > row * 568) {
-        //     this.y = 0;
-        // }
-
         this.y += (20);
         // this.y ++;
         var row = Math.ceil(mapCanvas.height / 568);
@@ -127,7 +119,7 @@ var hero = {
     bullets: [], //用于记录发射出去的子弹
     flagShot: 0, //子弹发射频率
     armType: 0, //武器类型(0: 单排; 1:双排)
-    boom: true, //是否爆炸
+    boom: false, //是否爆炸
     //方法
     draw: function () {
         //控制图片切换
@@ -137,8 +129,7 @@ var hero = {
                 this.i++;
                 if (this.i == 5) {
                     //飞机死亡
-                    // gameOver();
-                    this.i = 0
+                    gameOver();
                 }
             } else {
                 this.i = (this.i++) % 2;
@@ -226,7 +217,7 @@ function Enemy(x, y, w, h, img, speed, hp, score, maxI) {
     this.speed = speed; //速度
     this.hp = hp; //血量
     this.score = score; //分数
-    this.boom = true; //是否爆炸
+    this.boom = false; //是否爆炸
     this.i = 0; //第几张图片
     this.maxI = maxI; //播放的图片张数
     this.isDie = false; //是否死亡
@@ -241,8 +232,7 @@ Enemy.prototype.draw = function () {
             this.i++;
             if (this.i == this.maxI) {
                 //当图片切换结束,飞机死亡
-                // this.isDie = true;
-                this.i = 0
+                this.isDie = true;
             }
             //重置
             this.flagI = 0;
@@ -275,7 +265,7 @@ function random(x, y) {
 var enemyImg1 = new Image();
 enemyImg1.src = "img/enemy1.png";
 var enemyImg2 = new Image();
-enemyImg2.src = "img/enemy22.png";
+enemyImg2.src = "img/enemy2.png";
 var enemyImg3 = new Image();
 enemyImg3.src = "img/enemy3.png";
 //记录创建的敌机
@@ -366,7 +356,7 @@ var timeout = null;
 function justify() {
     //道具和飞机
     for (var i = 0; i < props.length; i++) {
-        if (!hero.boom) {
+        if (hero.boom) {
             continue;
         }
         if (!crash(props[i], hero)) {
@@ -437,15 +427,12 @@ function justify() {
     //敌机和飞机
     for (var i = 0; i < enemies.length; i++) {
         //如果敌机已经爆炸, 不做碰撞检测
-        if (!enemies[i].boom) {
-            console.log('碰撞');
+        if (enemies[i].boom) {
             continue;
-            
         }
         if (crash(enemies[i], hero)) {
             //飞机爆炸
-            gameOver();
-            // hero.boom = true;
+            hero.boom = true;
         }
     }
 }
@@ -461,7 +448,7 @@ function main() {
     randomEnemy();
     // 产生道具
     // randomProp();
-    if (hero.boom) {
+    if (!hero.boom) {
         //检测
         justify();
     }
@@ -620,3 +607,10 @@ function getAirwarList() {
         }
     })
 };
+
+function limitgameover(num) {
+    if (num > 50000) {
+        hero.boom = true;
+        scoreSpan.innerHTML = Number('50000')
+    }
+}
