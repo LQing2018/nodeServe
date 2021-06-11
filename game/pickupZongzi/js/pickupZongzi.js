@@ -15,7 +15,7 @@ var menuUl = document.getElementById("menu");
 var endScoreLi = document.getElementById("end-score");
 mapCanvas.width = document.documentElement.clientWidth;
 mapCanvas.height = document.documentElement.clientHeight;
-var picsnames = ["background.png", "enemy3.png", "herofly.png", "loading.gif", "prop.png"];
+var picsnames = ["background.png", "enemy1.png", "herofly2.png", "loading.gif", "prop2.png"];
 var picCount = 0;
 var musicCount = 0;
 var musics = [];
@@ -39,49 +39,52 @@ var background = {
     w: mapCanvas.width,
     h: mapCanvas.height,
     draw: function () {
+        //如何满屏, 并且不调整图片比例
+        //1.求最大行和最大列
+        var col = Math.ceil(mapCanvas.width / mapCanvas.width);
         var row = Math.ceil(mapCanvas.height / 568);
-        var col = Math.ceil(mapCanvas.width / 320);
+        //2.循环添加图片
+        //为了保证图片无限滚动, 画两张一样的背景图
         for (var i = -row; i < row; i++) { //行
-            for (var j = 0; j < col; j++) { //列
-                ctx.drawImage(bgImage, 320 * j, 568 * i + this.y);
+            for (var j = 0; j < col; j++) {
+                ctx.drawImage(bgImage, 0, 0, 320, 568, mapCanvas.width * j, mapCanvas.height * i + this.y, mapCanvas.width, mapCanvas.height);
             }
         }
     },
     move: function () {
-        this.y += (20);
-        var row = Math.ceil(mapCanvas.height / 568);
-        if (this.y > row * 568) {
-            this.y = 0;
-        }
+        // this.y += (20);
+        // var row = Math.ceil(mapCanvas.height / 568);
+        // if (this.y > row * 568) {
+        //     this.y = 0;
+        // }
     },
 };
 var heroImg = new Image();
-heroImg.src = "img/herofly.png";
+heroImg.src = "img/herofly2.png";
 var hero = {
     //属性
-    x: mapCanvas.width / 2 - 33,
-    y: mapCanvas.height - 82 - 100,
-    w: 66,
-    h: 82,
+    x: mapCanvas.width / 2 - 60,
+    y: mapCanvas.height - 30 - 120,
+    w: 120,
+    h: 120,
     i: 0, //第几张图片(从0开始算) 
     //方法
     draw: function () {
-
         //把图片的某一部分画到canvas上某个区域
-        ctx.drawImage(heroImg, this.i * this.w, 0, this.w, this.h, this.x, this.y, this.w, this.h);
+        ctx.drawImage(heroImg, this.i * this.w, 0, this.w, this.h, this.x, this.y, this.w * 1.5, this.h * 1.5);
     },
 }
 
-//鼠标控制飞机
+//鼠标控制人物
 mapCanvas.onmousedown = function (event) {
     //1.鼠标位置
     var x = event.offsetX;
     var y = event.offsetY;
-    //2.判断是否选中飞机
+    //2.判断是否选中人物
     if (x >= hero.x && x <= hero.x + hero.w && y >= hero.y && y <= hero.y + hero.h) {
-        //选中飞机, 才能移动
+        //选中人物, 才能移动
         mapCanvas.onmousemove = function (event) {
-            //飞机的中心在鼠标的位置
+            //人物的中心在鼠标的位置
             hero.x = event.offsetX - hero.w / 2;
             // hero.y = event.offsetY - hero.h / 2;
             hero.y = hero.y;
@@ -100,11 +103,11 @@ mapCanvas.ontouchstart = function (event) {
     //1.手指的位置
     var x = event.touches[0].clientX;
     var y = event.touches[0].clientY;
-    //2.判断是否选中飞机
+    //2.判断是否选中人物
     if (x >= hero.x && x <= hero.x + hero.w && y >= hero.y && y <= hero.y + hero.h) {
-        //选中飞机, 才能移动
+        //选中人物, 才能移动
         mapCanvas.ontouchmove = function (event) {
-            //飞机的中心在鼠标的位置
+            //人物的中心在鼠标的位置
             hero.x = event.touches[0].clientX - hero.w / 2;
             // hero.y = event.touches[0].clientY - hero.h / 2;
             hero.y = hero.y;
@@ -119,7 +122,7 @@ mapCanvas.ontouchend = function () {
     mapCanvas.ontouchmove = null;
 }
 
-//敌机
+//香蕉皮
 function Enemy(x, y, w, h, img, speed, hp, score, maxI) {
     //属性
     this.x = x;
@@ -146,8 +149,8 @@ Enemy.prototype.move = function () {
 function random(x, y) {
     return parseInt(Math.random() * (y - x + 1) + x);
 }
-var enemyImg3 = new Image();
-enemyImg3.src = "img/enemy3.png";
+var enemyImg1 = new Image();
+enemyImg1.src = "img/enemy1.png";
 var enemies = [];
 
 function randomEnemy() {
@@ -157,8 +160,7 @@ function randomEnemy() {
         var randomX = random(0, mapCanvas.width - 110);
         //随机速度
         var randomSpeed = random(10, 20);
-        var enemy = new Enemy(randomX, -164, 110, 164, enemyImg3, randomSpeed, 12, 300, 10);
-
+        var enemy = new Enemy(randomX, -64, 46, 64, enemyImg1, randomSpeed, 6, 200, 6);
         enemies.push(enemy);
     }
     for (var i = 0; i < enemies.length; i++) {
@@ -172,7 +174,7 @@ function randomEnemy() {
     }
 }
 var propImg = new Image();
-propImg.src = "img/prop.png";
+propImg.src = "img/prop2.png";
 
 function Prop(x, y, w, h, type, speed) {
     this.x = x;
@@ -194,18 +196,18 @@ Prop.prototype.move = function () {
 var props = [];
 
 function randomProp() {
-    if (random(1, 1000) <= 10) {
-        var randomX = random(0, mapCanvas.width - 38);
+    if (random(1, 1000) <= 30) {
+        var randomX = random(0, mapCanvas.width);
         var randomType = random(0, 1);
-        var randomSpeed = random(5, 10);
+        var randomSpeed = random(8, 20);
         var prop = new Prop(randomX, -68, 38, 68, randomType, randomSpeed);
         props.push(prop);
     }
     for (var i = 0; i < props.length; i++) {
+
         if (props[i].y >= mapCanvas.height || props[i].isUsed) {
             props.splice(i, 1);
-            i--;
-
+            i--; 
         } else {
             props[i].move();
             props[i].draw();
@@ -232,25 +234,28 @@ function crash(obj1, obj2) {
 }
 //碰撞检测
 function justify() {
-    //道具和飞机
+    //粽子和人物
     for (var i = 0; i < props.length; i++) {
         if (hero.boom) {
             continue;
         }
         if (!crash(props[i], hero)) {
             continue;
-        }
-        console.log("得分+1");
-        scoreSpan.innerHTML -- 
+        } 
+        //修改道具状态为使用
+        console.log("得分+1"); 
+        scoreSpan.innerHTML++
+        props[i].isUsed = true;
+
     }
 
-    //敌机和飞机
+    //香蕉皮和人物
     for (var i = 0; i < enemies.length; i++) {
         if (crash(enemies[i], hero)) {
             //扣分炸弹
             enemies.splice(i, 1);
             console.log("得分-1");
-            scoreSpan.innerHTML ++
+            scoreSpan.innerHTML--
         }
     }
 }
@@ -263,7 +268,7 @@ function main() {
     background.move();
     hero.draw();
     randomEnemy();
-    // 产生道具
+    // 产生粽子
     randomProp();
     if (!hero.boom) {
         justify();
@@ -279,7 +284,7 @@ window.onresize = function () {
 }
 
 //游戏结束
-function gameOver() { 
+function gameOver() {
     endScoreLi.innerText = scoreSpan.innerText;
     //显示菜单
     menuUl.style.display = "block";
