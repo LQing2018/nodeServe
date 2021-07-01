@@ -10,7 +10,11 @@ const router = new Router()
 
 //匹配任何路由，如果不写next，这个路由被匹配到了就不会继续向下匹配
 app.use(async (ctx, next) => {
+<<<<<<< HEAD
     console.log("我是一个中间件");
+=======
+    // console.log("我是一个中间件");
+>>>>>>> 010998bac48e13223219890d6cca7053c79a71cb
     // ctx.body = "第一个koa项1目";
     await next()
     //如果页面找不到
@@ -26,6 +30,29 @@ router.get('/', async (ctx) => {
 router.get('/admin', async (ctx) => {
     ctx.body = "admin页面"
 })
+<<<<<<< HEAD
+=======
+router.get('/articles', async function (ctx) {
+    /* 测试-start */
+    const mysql = require('mysql');
+    let pool = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'users',
+    });
+
+    pool.query('SELECT * from users', (err, data, fields) => {
+        if (err) return;
+        
+        console.log(data);
+        ctx.body = data[0].RowDataPacket
+    });
+
+    pool.end();
+    /* 测试-end */
+})
+>>>>>>> 010998bac48e13223219890d6cca7053c79a71cb
 router.get('/news', async (ctx) => {
     // ctx 上下文 context 包含了request 和 respinse 等信息
     // 返回数据  相当于：原生里面的res.writeHead() res.end()
@@ -61,5 +88,9 @@ app.use(router.allowedMethods())
    */
 
 //在listen里面写端口号 监听端口
+<<<<<<< HEAD
 // http://localhost:3000/
+=======
+// localhost:3000
+>>>>>>> 010998bac48e13223219890d6cca7053c79a71cb
 app.listen(3000);
